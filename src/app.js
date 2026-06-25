@@ -31,6 +31,15 @@ app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 // Mount API routes under standard prefix
 app.use('/api/v1', apiRoutes);
 
+// Root route welcome and health check
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Welcome to the Wattcharge Backend API.',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Fallback for unhandled routes
 app.use('*', (req, res, next) => {
   next(new APIError(`Resource route not found: ${req.originalUrl}`, 404));
