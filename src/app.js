@@ -11,7 +11,9 @@ import apiRoutes from './routes/index.js';
 const app = express();
 
 // Secure app by setting various HTTP headers
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: 'cross-origin' }
+}));
 
 // Enable Cross-Origin Resource Sharing
 app.use(cors());

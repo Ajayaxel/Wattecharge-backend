@@ -2,6 +2,9 @@ import http from 'http';
 import app from './app.js';
 import { connectDB } from './config/db.js';
 import { seedVehicles } from './features/vehicle/vehicle.seed.js';
+import { seedBrands } from './features/brand/brand.seed.js';
+import { seedCategories } from './features/category/category.seed.js';
+import { seedServices } from './features/service/service.seed.js';
 import { socketService } from './services/socket.service.js';
 import { env } from './config/env.js';
 import { logger } from './utils/logger.js';
@@ -15,6 +18,9 @@ const startServer = async () => {
 
   // Bootstrapping initial vehicle list if required
   await seedVehicles();
+  await seedBrands();
+  await seedCategories();
+  await seedServices();
 
   // Create Node HTTP Server wrapping the express application
   const server = http.createServer(app);

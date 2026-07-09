@@ -20,7 +20,6 @@ const vehicleSchema = new mongoose.Schema(
     type: {
       type: String,
       required: [true, 'Type is required'],
-      enum: ['SUV', 'Sedan'],
       trim: true,
     },
     isActive: {

@@ -1,5 +1,6 @@
 import { vehicleService } from './vehicle.service.js';
-import { sendSuccess } from '../../utils/response.js';
+import { Brand } from '../brand/brand.model.js';
+import { sendSuccess, APIError } from '../../utils/response.js';
 
 /**
  * Handles HTTP GET requests to retrieve vehicles (supports search & filter).
@@ -48,7 +49,22 @@ export const getVehicleById = async (req, res, next) => {
  */
 export const createVehicle = async (req, res, next) => {
   try {
-    const newVehicle = await vehicleService.createVehicle(req.body);
+    let imageUrl = '';
+    if (req.file) {
+      imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    } else if (req.body.imageUrl && req.body.imageUrl.trim()) {
+      imageUrl = req.body.imageUrl.trim();
+    } else {
+      throw new APIError('Vehicle image file or imageUrl is required.', 400);
+    }
+
+    const newVehicle = await vehicleService.createVehicle({
+      brand: req.body.brand,
+      modelName: req.body.modelName,
+      type: req.body.type,
+      imageUrl,
+    });
+
     const serializedVehicle = {
       id: newVehicle._id.toString(),
       brand: newVehicle.brand,
@@ -67,7 +83,17 @@ export const createVehicle = async (req, res, next) => {
  */
 export const updateVehicle = async (req, res, next) => {
   try {
-    const updatedVehicle = await vehicleService.updateVehicle(req.params.id, req.body);
+    let imageUrl = req.body.imageUrl;
+    if (req.file) {
+      imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    }
+
+    const updateData = { ...req.body };
+    if (imageUrl) {
+      updateData.imageUrl = imageUrl;
+    }
+
+    const updatedVehicle = await vehicleService.updateVehicle(req.params.id, updateData);
     const serializedVehicle = {
       id: updatedVehicle._id.toString(),
       brand: updatedVehicle.brand,
@@ -98,25 +124,12 @@ export const deleteVehicle = async (req, res, next) => {
  */
 export const getBrands = async (req, res, next) => {
   try {
-    const brands = [
-      {
-        name: 'Tesla',
-        logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Tesla_logo.svg/1200px-Tesla_logo.svg.png',
-      },
-      {
-        name: 'BMW',
-        logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/BMW.svg/1200px-BMW.svg.png',
-      },
-      {
-        name: 'BYD',
-        logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BYD_logo.svg/1200px-BYD_logo.svg.png',
-      },
-      {
-        name: 'Volkswagen',
-        logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Volkswagen_logo_2019.svg/1200px-Volkswagen_logo_2019.svg.png',
-      },
-    ];
-    return sendSuccess(res, 'Brands retrieved successfully.', brands, 200);
+    const brands = await Brand.find().sort({ name: 1 });
+    const formattedBrands = brands.map(brand => ({
+      name: brand.name,
+      logoUrl: brand.logoUrl,
+    }));
+    return sendSuccess(res, 'Brands retrieved successfully.', formattedBrands, 200);
   } catch (error) {
     next(error);
   }
