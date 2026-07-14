@@ -23,6 +23,10 @@ const serviceSchema = new mongoose.Schema(
       required: [true, 'Service category is required'],
       enum: ['on_demand', 'roadside'],
     },
+    cost: {
+      type: Number,
+      default: 0,
+    },
     isActive: {
       type: Boolean,
       default: true,

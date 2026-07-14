@@ -32,4 +32,10 @@ export const env = {
     pass: process.env.SMTP_PASS || '',
     from: process.env.SMTP_FROM || 'noreply@wattcharge.com',
   },
+  paymob: {
+    apiKey: process.env.PAYMOB_API_KEY,
+    secretKey: process.env.PAYMOB_SECRET_KEY,
+    integrationId: process.env.PAYMOB_INTEGRATION_ID,
+    iframeId: process.env.PAYMOB_IFRAME_ID,
+  }
 };

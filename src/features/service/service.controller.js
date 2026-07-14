@@ -26,7 +26,7 @@ export const getServices = async (req, res) => {
  */
 export const createService = async (req, res) => {
   try {
-    const { name, subtitle, icon, category, isActive } = req.body;
+    const { name, subtitle, icon, category, isActive, cost } = req.body;
     
     if (!name || !subtitle || !icon || !category) {
       return res.status(400).json({
@@ -40,6 +40,7 @@ export const createService = async (req, res) => {
       subtitle: subtitle.trim(),
       icon: icon.trim(),
       category,
+      cost: Number(cost) || 0,
       isActive: isActive !== false,
     });
 
@@ -61,7 +62,7 @@ export const createService = async (req, res) => {
 export const updateService = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, subtitle, icon, category, isActive } = req.body;
+    const { name, subtitle, icon, category, isActive, cost } = req.body;
 
     const service = await Service.findById(id);
     if (!service) {
@@ -76,6 +77,7 @@ export const updateService = async (req, res) => {
     if (icon) service.icon = icon.trim();
     if (category) service.category = category;
     if (isActive !== undefined) service.isActive = isActive;
+    if (cost !== undefined) service.cost = Number(cost);
 
     await service.save();
 

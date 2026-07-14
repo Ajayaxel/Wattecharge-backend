@@ -91,3 +91,24 @@ export const registerUserVehicle = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * Handles HTTP DELETE requests to remove a vehicle from a user's garage.
+ */
+export const removeUserVehicle = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const userVehicle = await UserVehicle.findOne({ _id: id, user: req.user._id });
+    if (!userVehicle) {
+      throw new APIError('Vehicle not found in your garage.', 404);
+    }
+
+    // Hard delete or soft delete. Let's hard delete for simplicity.
+    await UserVehicle.findByIdAndDelete(id);
+
+    return sendSuccess(res, 'Vehicle removed successfully.', null, 200);
+  } catch (error) {
+    next(error);
+  }
+};
