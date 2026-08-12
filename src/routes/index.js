@@ -12,6 +12,7 @@ import productCategoryRoutes from '../features/product/productCategory.routes.js
 import orderRoutes from '../features/order/order.routes.js';
 import walletRoutes from '../features/wallet/wallet.routes.js';
 import paymentRoutes from '../features/payment/payment.routes.js';
+import companyRoutes from '../features/company/company.routes.js';
 
 const router = Router();
 
@@ -29,5 +30,6 @@ router.use('/product-categories', productCategoryRoutes);
 router.use('/orders', orderRoutes);
 router.use('/wallet', walletRoutes);
 router.use('/payments', paymentRoutes);
+router.use('/companies', companyRoutes);
 
 export default router;
