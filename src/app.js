@@ -16,7 +16,31 @@ app.use(helmet({
 }));
 
 // Enable Cross-Origin Resource Sharing
-app.use(cors());
+const allowedOrigins = [
+  'https://wattcharge-admin-production.up.railway.app',
+  'http://localhost:5173'
+];
+
+if (env.corsOrigin) {
+  allowedOrigins.push(env.corsOrigin);
+}
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1 && !allowedOrigins.includes('*')) {
+      return callback(new Error('Not allowed by CORS'), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-TOKEN']
+}));
+
+// Enable preflight for all routes
+app.options('*', cors());
 
 // Log HTTP requests in development mode
 if (env.nodeEnv === 'development') {

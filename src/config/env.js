@@ -37,5 +37,6 @@ export const env = {
     secretKey: process.env.PAYMOB_SECRET_KEY,
     integrationId: process.env.PAYMOB_INTEGRATION_ID,
     iframeId: process.env.PAYMOB_IFRAME_ID,
-  }
+  },
+  corsOrigin: process.env.CORS_ORIGIN
 };
