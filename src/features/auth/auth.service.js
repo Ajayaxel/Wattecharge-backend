@@ -127,8 +127,9 @@ class AuthService {
       throw new APIError('Invalid email or password.', 401);
     }
 
-    if (user.role !== 'admin') {
-      throw new APIError('Access denied. Only administrators can access the admin panel.', 403);
+    // Allow only admin and fleet_admin roles into the portal
+    if (!['admin', 'fleet_admin'].includes(user.role)) {
+      throw new APIError('Access denied. Only portal users can access this panel.', 403);
     }
 
     if (!user.isActive) {

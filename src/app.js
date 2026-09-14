@@ -29,10 +29,10 @@ app.use(cors({
   origin: function (origin, callback) {
     // allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1 && !allowedOrigins.includes('*')) {
-      return callback(new Error('Not allowed by CORS'), false);
+    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes('*') || (env.nodeEnv === 'development' && origin.includes('localhost'))) {
+      return callback(null, true);
     }
-    return callback(null, true);
+    return callback(new Error('Not allowed by CORS'), false);
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],

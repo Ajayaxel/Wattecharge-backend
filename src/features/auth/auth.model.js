@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['user', 'admin'],
+      enum: ['user', 'admin', 'fleet_admin'],
       default: 'user',
     },
     isActive: {
@@ -49,6 +49,11 @@ const userSchema = new mongoose.Schema(
     companyCodeId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'CompanyCode',
+      default: null,
+    },
+    fleetCompanyId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Company',
       default: null,
     },
   },

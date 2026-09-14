@@ -19,7 +19,6 @@ const brandSchema = new mongoose.Schema(
   }
 );
 
-// Optimize database queries with index to prevent lag
-brandSchema.index({ name: 1 });
+// Index is automatically created by unique: true on the name field
 
 export const Brand = mongoose.model('Brand', brandSchema);

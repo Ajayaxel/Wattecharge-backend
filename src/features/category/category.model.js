@@ -19,7 +19,6 @@ const categorySchema = new mongoose.Schema(
   }
 );
 
-// Optimize database queries with index to prevent lag
-categorySchema.index({ name: 1 });
+// Index is automatically created by unique: true on the name field
 
 export const Category = mongoose.model('Category', categorySchema);

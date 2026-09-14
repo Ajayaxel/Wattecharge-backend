@@ -29,7 +29,16 @@ export const errorHandler = (err, req, res, next) => {
   // Mongoose Duplicate Key Error
   if (err.code === 11000) {
     const field = Object.keys(err.keyValue || {})[0] || 'field';
-    return sendError(res, `Duplicate field value: ${field}. Please use another value.`, 400);
+    const fieldLabels = {
+      email: 'Email address',
+      phoneNumber: 'Phone number',
+      fleetCode: 'Fleet code',
+      code: 'Company code',
+      name: 'Name',
+    };
+    const label = fieldLabels[field] || field;
+    const value = err.keyValue?.[field];
+    return sendError(res, `${label} "${value}" is already in use. Please choose a different value.`, 400);
   }
 
   // JWT Errors

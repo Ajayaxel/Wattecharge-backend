@@ -61,6 +61,31 @@ class EmailService {
     `;
     return this.sendEmail(to, subject, text, html);
   }
+  /**
+   * Sends a fleet invite email.
+   * @param {String} to - Receiver email
+   * @param {String} fleetName - Name of the fleet company
+   * @param {String} fleetCode - Fleet company code
+   */
+  async sendFleetInviteEmail(to, fleetName, fleetCode) {
+    const subject = `You're invited to join ${fleetName} on Wattcharge!`;
+    const text = `Hi,\n\nYou have been invited to join the ${fleetName} fleet on Wattcharge.\n\nUse the following Fleet Code when signing up or in your account settings:\n${fleetCode}\n\nBest regards,\nThe Wattcharge Team`;
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 8px;">
+        <h2 style="color: #4CAF50;">Join ${fleetName} on Wattcharge!</h2>
+        <p>Hi there,</p>
+        <p>You have been invited to join the <strong>${fleetName}</strong> fleet on Wattcharge.</p>
+        <p>Use the following Fleet Code to link your account to the fleet:</p>
+        <div style="background-color: #f5f5f5; padding: 15px; border-radius: 6px; text-align: center; margin: 20px 0;">
+          <h1 style="margin: 0; color: #333; letter-spacing: 2px;">${fleetCode}</h1>
+        </div>
+        <p>If you don't have an account yet, you can enter this code during signup.</p>
+        <br/>
+        <p>Best regards,<br/><strong>The Wattcharge Team</strong></p>
+      </div>
+    `;
+    return this.sendEmail(to, subject, text, html);
+  }
 }
 
 export const emailService = new EmailService();
