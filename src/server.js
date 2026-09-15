@@ -1,6 +1,7 @@
 import http from 'http';
 import app from './app.js';
 import { connectDB } from './config/db.js';
+import { seedAdmin } from './features/auth/auth.seed.js';
 import { seedVehicles } from './features/vehicle/vehicle.seed.js';
 import { seedBrands } from './features/brand/brand.seed.js';
 import { seedCategories } from './features/category/category.seed.js';
@@ -16,7 +17,8 @@ const startServer = async () => {
   // Connect to database
   await connectDB();
 
-  // Bootstrapping initial vehicle list if required
+  // Bootstrapping initial datasets if required
+  await seedAdmin();
   await seedVehicles();
   await seedBrands();
   await seedCategories();
