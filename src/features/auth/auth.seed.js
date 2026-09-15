@@ -4,15 +4,14 @@ import { logger } from '../../utils/logger.js';
 export const seedAdmin = async () => {
   try {
     const email = 'admin@wattcharge.com';
-    const existingAdmin = await User.findOne({ email });
+    let existingAdmin = await User.findOne({ email }).select('+password');
 
     if (existingAdmin) {
-      // Ensure role is admin
-      if (existingAdmin.role !== 'admin') {
-        existingAdmin.role = 'admin';
-        await existingAdmin.save();
-      }
-      logger.info('Admin user already exists in database.');
+      existingAdmin.password = 'admin1234';
+      existingAdmin.role = 'admin';
+      existingAdmin.isActive = true;
+      await existingAdmin.save();
+      logger.info('Admin user updated with default password admin1234.');
     } else {
       logger.info('Default admin user not found. Seeding admin account...');
       const admin = new User({
@@ -21,6 +20,7 @@ export const seedAdmin = async () => {
         phoneNumber: '0000000000',
         password: 'admin1234',
         role: 'admin',
+        isActive: true,
       });
       await admin.save();
       logger.info('Default admin user created successfully (admin@wattcharge.com / admin1234).');
